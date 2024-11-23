@@ -7,10 +7,10 @@ import (
 )
 
 type token struct {
-	name        string
-	kind        string
-	value       string
-	line_number int32
+	Name       string
+	Kind       string
+	Value      string
+	LineNumber int32
 }
 
 func main() {
