@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 )
@@ -12,7 +13,13 @@ func check(e error) {
 }
 
 func main() {
-	dat, err := os.ReadFile("/Users/tymalik/Documents/git/markdown_parser_go/test.md")
+	f, err := os.Open("/Users/tymalik/Documents/git/markdown_parser_go/test.md")
 	check(err)
-	fmt.Print(string(dat))
+
+	reader := bufio.NewReader(f)
+	data := make([]byte, 100)
+	_, err = reader.Read(data)
+	check(err)
+
+	fmt.Println(string(data))
 }
