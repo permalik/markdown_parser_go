@@ -18,16 +18,36 @@ func main() {
 	check(e)
 
 	r := bufio.NewReader(f)
-	var d []byte
-
-	d, e = r.ReadBytes('\n')
-	check(e)
-
-	lex(d)
+	lc := 0
+	lex(r, lc)
 }
 
-func lex(l []byte) {
-	fmt.Println(string(l))
+func lex(r *bufio.Reader, lc int) {
+	for {
+		var l []byte
+		for {
+			d, i, e := r.ReadLine()
+			if e != nil {
+				if e.Error() == "EOF" {
+					break
+				}
+				fmt.Println("error reading file: ", e)
+				return
+			}
+
+			l = append(l, d...)
+
+			if !i {
+				break
+			}
+		}
+		if len(l) == 0 {
+			break
+		} else {
+			lc += 1
+		}
+		fmt.Printf("line#:%d\n%s\n", lc, string(l))
+	}
 }
 
 func check(e error) {
