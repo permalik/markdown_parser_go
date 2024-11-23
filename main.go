@@ -1,7 +1,18 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
 
 func main() {
-	fmt.Println("asdf")
+	dat, err := os.ReadFile("/Users/tymalik/Documents/git/markdown_parser_go/test.md")
+	check(err)
+	fmt.Print(string(dat))
 }
