@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-type token struct {
+type Token struct {
 	Name       string
 	Kind       string
 	Value      string
