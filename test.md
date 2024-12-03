@@ -42,18 +42,6 @@ This is *italic*, and this is **bold**. You can also combine them: ***bold and i
 - [ ] Task two
 - [ ] Task three
 
-## Line Breaks
-
-  
-
-First Break  
-
-Second Break  
-
-## Single Space Line
-
- 
-
 ## Links
 
 This is a [link to OpenAI](https://www.openai.com).

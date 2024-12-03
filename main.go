@@ -14,61 +14,27 @@ type Token struct {
 }
 
 func main() {
-	f, e := os.Open("/Users/tymalik/Documents/git/markdown_parser_go/test.md")
-	check(e)
-	r := bufio.NewReader(f)
-
-	ll := make([][]byte, 0)
-	lc := 0
-	readFile(r, &ll, lc)
-
-	for i, v := range ll {
-		fmt.Printf("line#:%d\n%s\n", i, string(v))
+	file, err := os.Open("/Users/tymalik/Documents/git/markdown_parser_go/test.md")
+	if err != nil {
+		fmt.Println("failed to open file")
+		panic(err)
 	}
+
+	reader := bufio.NewReader(file)
+
+	var line string
+	Lex(reader, &line)
 }
 
-func readFile(r *bufio.Reader, ll *[][]byte, lc int) {
-	fmt.Println("log")
-	s := bufio.NewScanner(r)
-	for s.Scan() {
-		lc += 1
-		if len(s.Bytes()) == 0 {
-			b := []byte{'<', ' ', 'n', 'e', 'w', 'l', 'i', 'n', 'e', ' ', '>'}
-			*ll = append(*ll, b)
+func Lex(reader *bufio.Reader, line *string) {
+	scanner := bufio.NewScanner(reader)
+	for scanner.Scan() {
+		if len(scanner.Bytes()) == 0 {
+			byte_array := []byte{'<', ' ', 'l', 'i', 'n', 'e', 'b', 'r', 'e', 'a', 'k', ' ', '>'}
+			*line = string(byte_array)
 		} else {
-			*ll = append(*ll, s.Bytes())
+			*line = string(scanner.Bytes())
 		}
-	}
-	// for {
-	// 	var l []byte
-	// 	for {
-	// 		d, i, e := r.ReadLine()
-	// 		if e != nil {
-	// 			if e.Error() == "EOF" {
-	// 				break
-	// 			}
-	// 			fmt.Println("error reading file: ", e)
-	// 			return
-	// 		}
-	//
-	// 		l = append(l, d...)
-	//
-	// 		if !i {
-	// 			break
-	// 		}
-	// 	}
-	// 	if len(l) == 0 {
-	// 		n := []byte{'\n'}
-	// 		*ll = append(*ll, n)
-	// 	} else {
-	// 		lc += 1
-	// 		*ll = append(*ll, l)
-	// 	}
-	// }
-}
-
-func check(e error) {
-	if e != nil {
-		panic(e)
+		fmt.Println(*line)
 	}
 }
