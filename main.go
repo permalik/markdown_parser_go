@@ -23,18 +23,24 @@ func main() {
 	reader := bufio.NewReader(file)
 
 	var line string
-	Lex(reader, &line)
+	var byte_offset int
+	Lex(reader, &line, &byte_offset)
 }
 
-func Lex(reader *bufio.Reader, line *string) {
+func Lex(reader *bufio.Reader, line *string, byte_offset *int) {
 	scanner := bufio.NewScanner(reader)
 	for scanner.Scan() {
 		if len(scanner.Bytes()) == 0 {
 			byte_array := []byte{'<', ' ', 'l', 'i', 'n', 'e', 'b', 'r', 'e', 'a', 'k', ' ', '>'}
 			*line = string(byte_array)
+			fmt.Printf("lb: _, bo: %d\n", *byte_offset)
 		} else {
-			*line = string(scanner.Bytes())
+			for _, v := range scanner.Bytes() {
+				*byte_offset += 1
+				fmt.Printf("ch: %s, bo: %d\n", string(v), *byte_offset)
+			}
+			// *line = string(scanner.Bytes())
 		}
-		fmt.Println(*line)
+		// fmt.Println(*line)
 	}
 }
