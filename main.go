@@ -120,10 +120,12 @@ type ParagraphNode struct {
 }
 
 type Visitor interface {
+	VisitTree(n *TreeNode)
 	VisitList(n *ListNode)
 	VisitParagraph(n *ParagraphNode)
 }
 
+func (n *TreeNode) Accept(v Visitor)      { v.VisitTree(n) }
 func (n *ListNode) Accept(v Visitor)      { v.VisitList(n) }
 func (n *ParagraphNode) Accept(v Visitor) { v.VisitParagraph(n) }
 
@@ -153,6 +155,17 @@ func (p *Parser) Parse() (Node, error) {
 			tree.Children = append(tree.Children, &ParagraphNode{
 				Text: tok.Text,
 			})
+		case BlankLine:
+			if len(currList) > 0 {
+				tree.Children = append(tree.Children, &ListNode{Items: currList})
+				currList = nil
+			}
 		}
 	}
+
+	if len(currList) > 0 {
+		tree.Children = append(tree.Children, &ListNode{Items: currList})
+	}
+
+	return tree, nil
 }
