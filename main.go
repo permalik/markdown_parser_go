@@ -36,6 +36,16 @@ func main() {
 	}
 
 	lexer := NewLexer(input)
+	parser := NewParser(lexer)
+	gen := NewMDGen(output)
+
+	ast, err := parser.Parse()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error parsing markdown: %v\n", err)
+		os.Exit(1)
+	}
+
+	ast.Accept(gen)
 }
 
 type Literal interface {
@@ -168,4 +178,29 @@ func (p *Parser) Parse() (Node, error) {
 	}
 
 	return tree, nil
+}
+
+type MDGen struct {
+	writer io.Writer
+}
+
+func NewMDGen(writer io.Writer) *MDGen {
+	return &MDGen{writer: writer}
+}
+
+func (g *MDGen) VisitTree(n *TreeNode) {
+	for _, child := range n.Children {
+		child.Accept(g)
+	}
+}
+
+func (g *MDGen) VisitList(n *ListNode) {
+	for _, item := range n.Items {
+		fmt.Fprintf(g.writer, "* %s\n", item)
+	}
+	fmt.Fprintln(g.writer)
+}
+
+func (g *MDGen) VisitParagragh(n *ParagraphNode) {
+	fmt.Fprintf(g.writer, "%s\n\n", n.Text)
 }
