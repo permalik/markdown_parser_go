@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -67,7 +68,7 @@ func (p Paragraph) isLiteral() {}
 func (b BlankLine) isLiteral() {}
 
 type Token struct {
-	Element Literal
+	Literal Literal
 	Line    int
 	Column  int
 }
@@ -95,13 +96,21 @@ func (l *Lexer) NextToken() (Token, error) {
 	switch {
 	case len(line) == 0:
 		return Token{
-			Element: BlankLine{},
+			Literal: BlankLine{},
 			Line:    l.line,
+		}, nil
+
+	case strings.HasPrefix(line, "* "):
+		return Token{
+			Literal: ListItem{
+				Text: strings.TrimPrefix(line, "* "),
+			},
+			Line: l.line,
 		}, nil
 
 	default:
 		return Token{
-			Element: Paragraph{
+			Literal: Paragraph{
 				Text: line,
 			},
 			Line: l.line,
@@ -156,7 +165,7 @@ func (p *Parser) Parse() (Node, error) {
 			return nil, fmt.Errorf("error parsing: %w", err)
 		}
 
-		switch tok := token.Element.(type) {
+		switch tok := token.Literal.(type) {
 		case Paragraph:
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
@@ -165,6 +174,8 @@ func (p *Parser) Parse() (Node, error) {
 			tree.Children = append(tree.Children, &ParagraphNode{
 				Text: tok.Text,
 			})
+		case ListItem:
+			currList = append(currList, tok.Text)
 		case BlankLine:
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
@@ -201,6 +212,6 @@ func (g *MDGen) VisitList(n *ListNode) {
 	fmt.Fprintln(g.writer)
 }
 
-func (g *MDGen) VisitParagragh(n *ParagraphNode) {
+func (g *MDGen) VisitParagraph(n *ParagraphNode) {
 	fmt.Fprintf(g.writer, "%s\n\n", n.Text)
 }
