@@ -6,6 +6,8 @@ import (
 	"io"
 	"os"
 	"strings"
+
+	"github.com/permalik/markdown_parser_go/literal"
 )
 
 func main() {
@@ -49,31 +51,8 @@ func main() {
 	ast.Accept(gen)
 }
 
-type Literal interface {
-	isLiteral()
-}
-
-type HorizontalRuleHyphen struct {
-	Text string
-}
-
-type ListItem struct {
-	Text string
-}
-
-type Paragraph struct {
-	Text string
-}
-
-type BlankLine struct{}
-
-func (h HorizontalRuleHyphen) isLiteral() {}
-func (l ListItem) isLiteral()             {}
-func (p Paragraph) isLiteral()            {}
-func (b BlankLine) isLiteral()            {}
-
 type Token struct {
-	Literal Literal
+	Literal literal.MarkdownLiteral
 	Line    int
 	Column  int
 }
@@ -105,13 +84,13 @@ func (l *Lexer) NextToken() (Token, error) {
 			fmt.Printf("BlankLine: '' Line: %d\n", l.line)
 		}
 		return Token{
-			Literal: BlankLine{},
+			Literal: literal.BlankLine{},
 			Line:    l.line,
 		}, nil
 
 	case strings.HasPrefix(line, "---"):
 		return Token{
-			Literal: HorizontalRuleHyphen{
+			Literal: literal.HorizontalRuleHyphen{
 				Text: line,
 			},
 			Line: l.line,
@@ -119,7 +98,7 @@ func (l *Lexer) NextToken() (Token, error) {
 
 	case strings.HasPrefix(line, "* "):
 		return Token{
-			Literal: ListItem{
+			Literal: literal.ListItem{
 				Text: strings.TrimPrefix(line, "* "),
 			},
 			Line: l.line,
@@ -127,7 +106,7 @@ func (l *Lexer) NextToken() (Token, error) {
 
 	default:
 		return Token{
-			Literal: Paragraph{
+			Literal: literal.Paragraph{
 				Text: line,
 			},
 			Line: l.line,
@@ -189,7 +168,7 @@ func (p *Parser) Parse() (Node, error) {
 		}
 
 		switch tok := token.Literal.(type) {
-		case HorizontalRuleHyphen:
+		case literal.HorizontalRuleHyphen:
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
@@ -197,7 +176,7 @@ func (p *Parser) Parse() (Node, error) {
 			tree.Children = append(tree.Children, &HorizontalRuleHyphenNode{
 				Text: tok.Text,
 			})
-		case Paragraph:
+		case literal.Paragraph:
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
@@ -205,9 +184,9 @@ func (p *Parser) Parse() (Node, error) {
 			tree.Children = append(tree.Children, &ParagraphNode{
 				Text: tok.Text,
 			})
-		case ListItem:
+		case literal.ListItem:
 			currList = append(currList, tok.Text)
-		case BlankLine:
+		case literal.BlankLine:
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
