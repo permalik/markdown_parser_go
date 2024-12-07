@@ -28,6 +28,10 @@ type ListNode struct {
 	Items []string
 }
 
+type TaskListNode struct {
+	Items []string
+}
+
 type ParagraphNode struct {
 	Text string
 }
@@ -36,12 +40,14 @@ type Visitor interface {
 	VisitTree(n *TreeNode)
 	VisitHorizontalRuleHyphen(n *HorizontalRuleHyphenNode)
 	VisitList(n *ListNode)
+	VisitTaskList(n *TaskListNode)
 	VisitParagraph(n *ParagraphNode)
 }
 
 func (n *TreeNode) Accept(v Visitor)                 { v.VisitTree(n) }
 func (n *HorizontalRuleHyphenNode) Accept(v Visitor) { v.VisitHorizontalRuleHyphen(n) }
 func (n *ListNode) Accept(v Visitor)                 { v.VisitList(n) }
+func (n *TaskListNode) Accept(v Visitor)             { v.VisitTaskList(n) }
 func (n *ParagraphNode) Accept(v Visitor)            { v.VisitParagraph(n) }
 
 func NewParser(lexer *lex.Lexer) *Parser {
@@ -51,6 +57,7 @@ func NewParser(lexer *lex.Lexer) *Parser {
 func (p *Parser) Parse() (Node, error) {
 	tree := &TreeNode{}
 	var currList []string
+	var currTaskList []string
 
 	for {
 		token, err := p.lexer.NextToken()
@@ -67,6 +74,10 @@ func (p *Parser) Parse() (Node, error) {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
 			}
+			if len(currTaskList) > 0 {
+				tree.Children = append(tree.Children, &TaskListNode{Items: currTaskList})
+				currTaskList = nil
+			}
 			tree.Children = append(tree.Children, &HorizontalRuleHyphenNode{
 				Text: tok.Text,
 			})
@@ -75,11 +86,17 @@ func (p *Parser) Parse() (Node, error) {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
 			}
+			if len(currTaskList) > 0 {
+				tree.Children = append(tree.Children, &TaskListNode{Items: currTaskList})
+				currTaskList = nil
+			}
 			tree.Children = append(tree.Children, &ParagraphNode{
 				Text: tok.Text,
 			})
 		case literal.ListItemHyphen:
 			currList = append(currList, tok.Text)
+		case literal.TaskList:
+			currTaskList = append(currTaskList, tok.Text)
 		case literal.BlankLine:
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})

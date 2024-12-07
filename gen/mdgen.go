@@ -27,7 +27,14 @@ func (g *MDGen) VisitHorizontalRuleHyphen(n *parse.HorizontalRuleHyphenNode) {
 
 func (g *MDGen) VisitList(n *parse.ListNode) {
 	for _, item := range n.Items {
-		fmt.Fprintf(g.writer, "* %s\n", item)
+		fmt.Fprintf(g.writer, "- %s\n", item)
+	}
+	fmt.Fprintln(g.writer)
+}
+
+func (g *MDGen) VisitTaskList(n *parse.TaskListNode) {
+	for _, item := range n.Items {
+		fmt.Fprintf(g.writer, "- [ ] %s\n", item)
 	}
 	fmt.Fprintln(g.writer)
 }

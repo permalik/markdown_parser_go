@@ -2,9 +2,15 @@ package literal
 
 /*
 ## Block
-- [ ] Unordered Lists (\*, +, -)
+- [x] UnorderedListHyphen (-)
+- [ ] Nested UnorderedListHyphen (-)
+- [ ] UnorderedListAsterisk (*)
+- [ ] Nested UnorderedListAsterisk (*)
+- [ ] UnorderedListPlus (+)
+- [ ] Nested UnorderedListPlus (+)
 - [ ] Ordered Lists (1., 2., 3.)
 - [ ] Task Lists (- [ ] Task item)
+- [ ] Nested Task Lists (- [ ] Task item)
 - [ ] Definition Lists (Term, followed by a new line : Definition)
 - [ ] Blockquotes (>)
 - [ ] Code Blocks (triple-backspace, four-space indentation)
@@ -44,6 +50,10 @@ type ListItemHyphen struct {
 	Text string
 }
 
+type TaskList struct {
+	Text string
+}
+
 type Paragraph struct {
 	Text string
 }
@@ -52,5 +62,6 @@ type BlankLine struct{}
 
 func (h HorizontalRuleHyphen) isLiteral() {}
 func (l ListItemHyphen) isLiteral()       {}
+func (t TaskList) isLiteral()             {}
 func (p Paragraph) isLiteral()            {}
 func (b BlankLine) isLiteral()            {}

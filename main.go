@@ -29,6 +29,8 @@ func main() {
 		defer file.Close()
 		input = file
 	} else {
+		// TODO: exit if stdin is empty
+		fmt.Println("Input Markdown Element. Enter to Submit. CTRL-C to Quit:")
 		input = os.Stdin
 	}
 
