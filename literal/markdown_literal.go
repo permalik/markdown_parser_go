@@ -13,8 +13,10 @@ package literal
 - [ ] Tables (using | for columns in a table row)
 
 ## Line
-- [ ] Heading (#, ##, ###, ####, #####, ######)
-- [ ] Horizontal Rules (triple- hyphen, underscore, or asterisk)
+- [x] Heading (#, ##, ###, ####, #####, ######)
+- [x] Horizontal Rule (---)
+- [ ] Horizontal Rule (___)
+- [ ] Horizontal Rule (***)
 - [ ] Footnotes ([^1]: Definition text)
 
 ## Inline
@@ -62,7 +64,7 @@ type HeadingSix struct {
 	Text string
 }
 
-type HorizontalRuleHyphen struct {
+type HorizontalRule struct {
 	Text string
 }
 
@@ -80,14 +82,14 @@ type Paragraph struct {
 
 type BlankLine struct{}
 
-func (h HeadingOne) isLiteral()           {}
-func (h HeadingTwo) isLiteral()           {}
-func (h HeadingThree) isLiteral()         {}
-func (h HeadingFour) isLiteral()          {}
-func (h HeadingFive) isLiteral()          {}
-func (h HeadingSix) isLiteral()           {}
-func (h HorizontalRuleHyphen) isLiteral() {}
-func (l ListItem) isLiteral()             {}
-func (t TaskList) isLiteral()             {}
-func (p Paragraph) isLiteral()            {}
-func (b BlankLine) isLiteral()            {}
+func (h HeadingOne) isLiteral()     {}
+func (h HeadingTwo) isLiteral()     {}
+func (h HeadingThree) isLiteral()   {}
+func (h HeadingFour) isLiteral()    {}
+func (h HeadingFive) isLiteral()    {}
+func (h HeadingSix) isLiteral()     {}
+func (h HorizontalRule) isLiteral() {}
+func (l ListItem) isLiteral()       {}
+func (t TaskList) isLiteral()       {}
+func (p Paragraph) isLiteral()      {}
+func (b BlankLine) isLiteral()      {}

@@ -45,7 +45,6 @@ func (l *Lexer) NextToken() (Token, error) {
 			Literal: literal.BlankLine{},
 			Line:    l.line,
 		}, nil
-
 	case strings.HasPrefix(line, "# "):
 		if l.debug {
 			fmt.Printf("HeadingOne: %s\nLine: %d\n", line, l.line)
@@ -56,7 +55,6 @@ func (l *Lexer) NextToken() (Token, error) {
 			},
 			Line: l.line,
 		}, nil
-
 	case strings.HasPrefix(line, "## "):
 		if l.debug {
 			fmt.Printf("HeadingTwo: %s\nLine: %d\n", line, l.line)
@@ -67,7 +65,6 @@ func (l *Lexer) NextToken() (Token, error) {
 			},
 			Line: l.line,
 		}, nil
-
 	case strings.HasPrefix(line, "### "):
 		if l.debug {
 			fmt.Printf("HeadingThree: %s\nLine: %d\n", line, l.line)
@@ -78,7 +75,6 @@ func (l *Lexer) NextToken() (Token, error) {
 			},
 			Line: l.line,
 		}, nil
-
 	case strings.HasPrefix(line, "#### "):
 		if l.debug {
 			fmt.Printf("HeadingFour: %s\nLine: %d\n", line, l.line)
@@ -89,7 +85,6 @@ func (l *Lexer) NextToken() (Token, error) {
 			},
 			Line: l.line,
 		}, nil
-
 	case strings.HasPrefix(line, "##### "):
 		if l.debug {
 			fmt.Printf("HeadingFive: %s\nLine: %d\n", line, l.line)
@@ -100,7 +95,6 @@ func (l *Lexer) NextToken() (Token, error) {
 			},
 			Line: l.line,
 		}, nil
-
 	case strings.HasPrefix(line, "###### "):
 		if l.debug {
 			fmt.Printf("HeadingSix: %s\nLine: %d\n", line, l.line)
@@ -111,18 +105,17 @@ func (l *Lexer) NextToken() (Token, error) {
 			},
 			Line: l.line,
 		}, nil
-
-	case strings.Compare(line, "---") == 0:
+	// TODO: allow > 3 characters on line
+	case strings.Compare(line, "---") == 0 || strings.Compare(line, "___") == 0 || strings.Compare(line, "***") == 0:
 		if l.debug {
 			fmt.Printf("HorizontalRuleHyphen: %s\nLine: %d\n", line, l.line)
 		}
 		return Token{
-			Literal: literal.HorizontalRuleHyphen{
+			Literal: literal.HorizontalRule{
 				Text: line,
 			},
 			Line: l.line,
 		}, nil
-
 	case strings.HasPrefix(line, "- [ ] "):
 		if l.debug {
 			fmt.Printf("TaskListItem: %s\nLine: %d\n", line, l.line)
@@ -133,7 +126,6 @@ func (l *Lexer) NextToken() (Token, error) {
 			},
 			Line: l.line,
 		}, nil
-
 	case strings.HasPrefix(line, "- ") || strings.HasPrefix(line, "* ") || strings.HasPrefix(line, "+ "):
 		if l.debug {
 			fmt.Printf("ListItem: %s\nLine: %d\n", line, l.line)
@@ -163,7 +155,6 @@ func (l *Lexer) NextToken() (Token, error) {
 			},
 			Line: l.line,
 		}, nil
-
 	default:
 		// if l.debug {
 		// 	fmt.Printf("Paragraph: %s\nLine: %d\n", line, l.line)
