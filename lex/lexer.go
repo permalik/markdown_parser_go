@@ -39,7 +39,7 @@ func (l *Lexer) NextToken() (Token, error) {
 	switch {
 	case len(line) == 0:
 		if l.debug {
-			fmt.Printf("BlankLine: '' Line: %d\n", l.line)
+			fmt.Printf("BlankLine: ''\nLine: %d\n", l.line)
 		}
 		return Token{
 			Literal: literal.BlankLine{},
@@ -47,6 +47,9 @@ func (l *Lexer) NextToken() (Token, error) {
 		}, nil
 
 	case strings.HasPrefix(line, "---"):
+		if l.debug {
+			fmt.Printf("HorizontalRuleHyphen: %s\nLine: %d\n", line, l.line)
+		}
 		return Token{
 			Literal: literal.HorizontalRuleHyphen{
 				Text: line,
