@@ -1,13 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"flag"
 	"fmt"
 	"io"
 	"os"
-	"strings"
 
+	"github.com/permalik/markdown_parser_go/lex"
 	"github.com/permalik/markdown_parser_go/literal"
 )
 
@@ -44,7 +43,7 @@ func main() {
 		output = os.Stdout
 	}
 
-	lexer := NewLexer(input, true)
+	lexer := lex.NewLexer(input, true)
 	parser := NewParser(lexer)
 
 	ast, err := parser.Parse()
@@ -65,71 +64,8 @@ func main() {
 	ast.Accept(visitor)
 }
 
-type Token struct {
-	Literal literal.MarkdownLiteral
-	Line    int
-	Column  int
-}
-
-type Lexer struct {
-	scanner *bufio.Scanner
-	line    int
-	debug   bool
-}
-
-func NewLexer(reader io.Reader, debug bool) *Lexer {
-	return &Lexer{
-		scanner: bufio.NewScanner(reader),
-		debug:   debug,
-	}
-}
-
-func (l *Lexer) NextToken() (Token, error) {
-	if !l.scanner.Scan() {
-		return Token{}, io.EOF
-	}
-
-	l.line++
-	line := l.scanner.Text()
-
-	switch {
-	case len(line) == 0:
-		if l.debug {
-			fmt.Printf("BlankLine: '' Line: %d\n", l.line)
-		}
-		return Token{
-			Literal: literal.BlankLine{},
-			Line:    l.line,
-		}, nil
-
-	case strings.HasPrefix(line, "---"):
-		return Token{
-			Literal: literal.HorizontalRuleHyphen{
-				Text: line,
-			},
-			Line: l.line,
-		}, nil
-
-	case strings.HasPrefix(line, "* "):
-		return Token{
-			Literal: literal.ListItem{
-				Text: strings.TrimPrefix(line, "* "),
-			},
-			Line: l.line,
-		}, nil
-
-	default:
-		return Token{
-			Literal: literal.Paragraph{
-				Text: line,
-			},
-			Line: l.line,
-		}, nil
-	}
-}
-
 type Parser struct {
-	lexer *Lexer
+	lexer *lex.Lexer
 }
 
 type Node interface {
@@ -164,7 +100,7 @@ func (n *HorizontalRuleHyphenNode) Accept(v Visitor) { v.VisitHorizontalRuleHyph
 func (n *ListNode) Accept(v Visitor)                 { v.VisitList(n) }
 func (n *ParagraphNode) Accept(v Visitor)            { v.VisitParagraph(n) }
 
-func NewParser(lexer *Lexer) *Parser {
+func NewParser(lexer *lex.Lexer) *Parser {
 	return &Parser{lexer: lexer}
 }
 
