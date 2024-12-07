@@ -53,6 +53,10 @@ type Literal interface {
 	isLiteral()
 }
 
+type HorizontalRuleHyphen struct {
+	Text string
+}
+
 type ListItem struct {
 	Text string
 }
@@ -63,9 +67,10 @@ type Paragraph struct {
 
 type BlankLine struct{}
 
-func (l ListItem) isLiteral()  {}
-func (p Paragraph) isLiteral() {}
-func (b BlankLine) isLiteral() {}
+func (h HorizontalRuleHyphen) isLiteral() {}
+func (l ListItem) isLiteral()             {}
+func (p Paragraph) isLiteral()            {}
+func (b BlankLine) isLiteral()            {}
 
 type Token struct {
 	Literal Literal
@@ -100,6 +105,14 @@ func (l *Lexer) NextToken() (Token, error) {
 			Line:    l.line,
 		}, nil
 
+	case strings.HasPrefix(line, "---"):
+		return Token{
+			Literal: HorizontalRuleHyphen{
+				Text: line,
+			},
+			Line: l.line,
+		}, nil
+
 	case strings.HasPrefix(line, "* "):
 		return Token{
 			Literal: ListItem{
@@ -130,6 +143,10 @@ type TreeNode struct {
 	Children []Node
 }
 
+type HorizontalRuleHyphenNode struct {
+	Text string
+}
+
 type ListNode struct {
 	Items []string
 }
@@ -140,13 +157,15 @@ type ParagraphNode struct {
 
 type Visitor interface {
 	VisitTree(n *TreeNode)
+	VisitHorizontalRuleHyphen(n *HorizontalRuleHyphenNode)
 	VisitList(n *ListNode)
 	VisitParagraph(n *ParagraphNode)
 }
 
-func (n *TreeNode) Accept(v Visitor)      { v.VisitTree(n) }
-func (n *ListNode) Accept(v Visitor)      { v.VisitList(n) }
-func (n *ParagraphNode) Accept(v Visitor) { v.VisitParagraph(n) }
+func (n *TreeNode) Accept(v Visitor)                 { v.VisitTree(n) }
+func (n *HorizontalRuleHyphenNode) Accept(v Visitor) { v.VisitHorizontalRuleHyphen(n) }
+func (n *ListNode) Accept(v Visitor)                 { v.VisitList(n) }
+func (n *ParagraphNode) Accept(v Visitor)            { v.VisitParagraph(n) }
 
 func NewParser(lexer *Lexer) *Parser {
 	return &Parser{lexer: lexer}
@@ -166,6 +185,14 @@ func (p *Parser) Parse() (Node, error) {
 		}
 
 		switch tok := token.Literal.(type) {
+		case HorizontalRuleHyphen:
+			if len(currList) > 0 {
+				tree.Children = append(tree.Children, &ListNode{Items: currList})
+				currList = nil
+			}
+			tree.Children = append(tree.Children, &HorizontalRuleHyphenNode{
+				Text: tok.Text,
+			})
 		case Paragraph:
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
@@ -203,6 +230,10 @@ func (g *MDGen) VisitTree(n *TreeNode) {
 	for _, child := range n.Children {
 		child.Accept(g)
 	}
+}
+
+func (g *MDGen) VisitHorizontalRuleHyphen(n *HorizontalRuleHyphen) {
+	fmt.Fprintf(g.writer, "%s\n", n.Text)
 }
 
 func (g *MDGen) VisitList(n *ListNode) {
