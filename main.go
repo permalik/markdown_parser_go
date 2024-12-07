@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -14,8 +15,13 @@ func main() {
 	var input io.Reader
 	var output io.Writer
 
-	if len(os.Args) > 1 {
-		file, err := os.Open(os.Args[1])
+	input_file := flag.String("i", "", "input file (default: stdin)")
+	output_file := flag.String("o", "", "output file (default: stdout)")
+	format_flag := flag.String("f", "md", "output format (md | html)")
+	flag.Parse()
+
+	if *input_file != "" {
+		file, err := os.Open(*input_file)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error opening input file: %v\n", err)
 			os.Exit(1)
@@ -26,8 +32,8 @@ func main() {
 		input = os.Stdin
 	}
 
-	if len(os.Args) > 2 {
-		file, err := os.Create(os.Args[2])
+	if *output_file != "" {
+		file, err := os.Create(*output_file)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error creating output file: %v\n", err)
 			os.Exit(1)
@@ -40,7 +46,6 @@ func main() {
 
 	lexer := NewLexer(input, true)
 	parser := NewParser(lexer)
-	gen := NewMDGen(output)
 
 	ast, err := parser.Parse()
 	if err != nil {
@@ -48,7 +53,16 @@ func main() {
 		os.Exit(1)
 	}
 
-	ast.Accept(gen)
+	var visitor Visitor
+	switch *format_flag {
+	case "md":
+		visitor = NewMDGen(output)
+	default:
+		fmt.Fprintf(os.Stderr, "unknown format: %s\n", *format_flag)
+		os.Exit(1)
+	}
+
+	ast.Accept(visitor)
 }
 
 type Token struct {
