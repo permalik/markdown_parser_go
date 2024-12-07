@@ -101,6 +101,17 @@ func (l *Lexer) NextToken() (Token, error) {
 			Line: l.line,
 		}, nil
 
+	case strings.HasPrefix(line, "###### "):
+		if l.debug {
+			fmt.Printf("HeadingSix: %s\nLine: %d\n", line, l.line)
+		}
+		return Token{
+			Literal: literal.HeadingSix{
+				Text: line,
+			},
+			Line: l.line,
+		}, nil
+
 	case strings.Compare(line, "---") == 0:
 		if l.debug {
 			fmt.Printf("HorizontalRuleHyphen: %s\nLine: %d\n", line, l.line)

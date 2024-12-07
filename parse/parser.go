@@ -40,6 +40,10 @@ type HeadingFiveNode struct {
 	Text string
 }
 
+type HeadingSixNode struct {
+	Text string
+}
+
 type HorizontalRuleHyphenNode struct {
 	Text string
 }
@@ -63,6 +67,7 @@ type Visitor interface {
 	VisitHeadingThree(n *HeadingThreeNode)
 	VisitHeadingFour(n *HeadingFourNode)
 	VisitHeadingFive(n *HeadingFiveNode)
+	VisitHeadingSix(n *HeadingSixNode)
 	VisitHorizontalRuleHyphen(n *HorizontalRuleHyphenNode)
 	VisitList(n *ListNode)
 	VisitTaskList(n *TaskListNode)
@@ -75,6 +80,7 @@ func (n *HeadingTwoNode) Accept(v Visitor)           { v.VisitHeadingTwo(n) }
 func (n *HeadingThreeNode) Accept(v Visitor)         { v.VisitHeadingThree(n) }
 func (n *HeadingFourNode) Accept(v Visitor)          { v.VisitHeadingFour(n) }
 func (n *HeadingFiveNode) Accept(v Visitor)          { v.VisitHeadingFive(n) }
+func (n *HeadingSixNode) Accept(v Visitor)           { v.VisitHeadingSix(n) }
 func (n *HorizontalRuleHyphenNode) Accept(v Visitor) { v.VisitHorizontalRuleHyphen(n) }
 func (n *ListNode) Accept(v Visitor)                 { v.VisitList(n) }
 func (n *TaskListNode) Accept(v Visitor)             { v.VisitTaskList(n) }
@@ -137,6 +143,14 @@ func (p *Parser) Parse() (Node, error) {
 				currList = nil
 			}
 			tree.Children = append(tree.Children, &HeadingFiveNode{
+				Text: tok.Text,
+			})
+		case literal.HeadingSix:
+			if len(currList) > 0 {
+				tree.Children = append(tree.Children, &ListNode{Items: currList})
+				currList = nil
+			}
+			tree.Children = append(tree.Children, &HeadingSixNode{
 				Text: tok.Text,
 			})
 		case literal.HorizontalRuleHyphen:

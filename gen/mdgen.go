@@ -46,6 +46,11 @@ func (g *MDGen) VisitHeadingFive(n *parse.HeadingFiveNode) {
 	fmt.Fprintln(g.writer)
 }
 
+func (g *MDGen) VisitHeadingSix(n *parse.HeadingSixNode) {
+	fmt.Fprintf(g.writer, "%s\n", n.Text)
+	fmt.Fprintln(g.writer)
+}
+
 func (g *MDGen) VisitHorizontalRuleHyphen(n *parse.HorizontalRuleHyphenNode) {
 	fmt.Fprintf(g.writer, "%s\n", n.Text)
 	fmt.Fprintln(g.writer)
