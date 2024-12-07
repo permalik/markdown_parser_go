@@ -32,6 +32,10 @@ type HeadingThreeNode struct {
 	Text string
 }
 
+type HeadingFourNode struct {
+	Text string
+}
+
 type HorizontalRuleHyphenNode struct {
 	Text string
 }
@@ -53,6 +57,7 @@ type Visitor interface {
 	VisitHeadingOne(n *HeadingOneNode)
 	VisitHeadingTwo(n *HeadingTwoNode)
 	VisitHeadingThree(n *HeadingThreeNode)
+	VisitHeadingFour(n *HeadingFourNode)
 	VisitHorizontalRuleHyphen(n *HorizontalRuleHyphenNode)
 	VisitList(n *ListNode)
 	VisitTaskList(n *TaskListNode)

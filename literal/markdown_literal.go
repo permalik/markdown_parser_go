@@ -50,6 +50,10 @@ type HeadingThree struct {
 	Text string
 }
 
+type HeadingFour struct {
+	Text string
+}
+
 type HorizontalRuleHyphen struct {
 	Text string
 }
@@ -71,6 +75,7 @@ type BlankLine struct{}
 func (h HeadingOne) isLiteral()           {}
 func (h HeadingTwo) isLiteral()           {}
 func (h HeadingThree) isLiteral()         {}
+func (h HeadingFour) isLiteral()          {}
 func (h HorizontalRuleHyphen) isLiteral() {}
 func (l ListItem) isLiteral()             {}
 func (t TaskList) isLiteral()             {}
