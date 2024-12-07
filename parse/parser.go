@@ -24,6 +24,10 @@ type HeadingOneNode struct {
 	Text string
 }
 
+type HeadingTwoNode struct {
+	Text string
+}
+
 type HorizontalRuleHyphenNode struct {
 	Text string
 }
@@ -42,6 +46,8 @@ type ParagraphNode struct {
 
 type Visitor interface {
 	VisitTree(n *TreeNode)
+	VisitHeadingOne(n *HeadingOneNode)
+	VisitHeadingTwo(n *HeadingTwoNode)
 	VisitHorizontalRuleHyphen(n *HorizontalRuleHyphenNode)
 	VisitList(n *ListNode)
 	VisitTaskList(n *TaskListNode)
@@ -74,6 +80,11 @@ func (p *Parser) Parse() (Node, error) {
 
 		switch tok := token.Literal.(type) {
 		case literal.HeadingOne:
+			if len(currList) > 0 {
+				tree.Children = append(tree.Children, &ListNode{Items: currList})
+				currList = nil
+			}
+		case literal.HeadingTwo:
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
