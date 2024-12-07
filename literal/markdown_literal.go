@@ -40,7 +40,7 @@ type HorizontalRuleHyphen struct {
 	Text string
 }
 
-type ListItem struct {
+type ListItemHyphen struct {
 	Text string
 }
 
@@ -51,6 +51,6 @@ type Paragraph struct {
 type BlankLine struct{}
 
 func (h HorizontalRuleHyphen) isLiteral() {}
-func (l ListItem) isLiteral()             {}
+func (l ListItemHyphen) isLiteral()       {}
 func (p Paragraph) isLiteral()            {}
 func (b BlankLine) isLiteral()            {}

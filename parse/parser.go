@@ -78,7 +78,7 @@ func (p *Parser) Parse() (Node, error) {
 			tree.Children = append(tree.Children, &ParagraphNode{
 				Text: tok.Text,
 			})
-		case literal.ListItem:
+		case literal.ListItemHyphen:
 			currList = append(currList, tok.Text)
 		case literal.BlankLine:
 			if len(currList) > 0 {
