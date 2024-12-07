@@ -36,7 +36,7 @@ func main() {
 		output = os.Stdout
 	}
 
-	lexer := NewLexer(input)
+	lexer := NewLexer(input, true)
 	parser := NewParser(lexer)
 	gen := NewMDGen(output)
 
@@ -81,12 +81,13 @@ type Token struct {
 type Lexer struct {
 	scanner *bufio.Scanner
 	line    int
+	debug   bool
 }
 
-func NewLexer(reader io.Reader) *Lexer {
+func NewLexer(reader io.Reader, debug bool) *Lexer {
 	return &Lexer{
 		scanner: bufio.NewScanner(reader),
-		line:    0,
+		debug:   debug,
 	}
 }
 
@@ -100,6 +101,9 @@ func (l *Lexer) NextToken() (Token, error) {
 
 	switch {
 	case len(line) == 0:
+		if l.debug {
+			fmt.Printf("BlankLine: '' Line: %d\n", l.line)
+		}
 		return Token{
 			Literal: BlankLine{},
 			Line:    l.line,
@@ -232,7 +236,7 @@ func (g *MDGen) VisitTree(n *TreeNode) {
 	}
 }
 
-func (g *MDGen) VisitHorizontalRuleHyphen(n *HorizontalRuleHyphen) {
+func (g *MDGen) VisitHorizontalRuleHyphen(n *HorizontalRuleHyphenNode) {
 	fmt.Fprintf(g.writer, "%s\n", n.Text)
 }
 
