@@ -36,6 +36,10 @@ type HeadingFourNode struct {
 	Text string
 }
 
+type HeadingFiveNode struct {
+	Text string
+}
+
 type HorizontalRuleHyphenNode struct {
 	Text string
 }
@@ -58,6 +62,7 @@ type Visitor interface {
 	VisitHeadingTwo(n *HeadingTwoNode)
 	VisitHeadingThree(n *HeadingThreeNode)
 	VisitHeadingFour(n *HeadingFourNode)
+	VisitHeadingFive(n *HeadingFiveNode)
 	VisitHorizontalRuleHyphen(n *HorizontalRuleHyphenNode)
 	VisitList(n *ListNode)
 	VisitTaskList(n *TaskListNode)
@@ -65,6 +70,11 @@ type Visitor interface {
 }
 
 func (n *TreeNode) Accept(v Visitor)                 { v.VisitTree(n) }
+func (n *HeadingOneNode) Accept(v Visitor)           { v.VisitHeadingOne(n) }
+func (n *HeadingTwoNode) Accept(v Visitor)           { v.VisitHeadingTwo(n) }
+func (n *HeadingThreeNode) Accept(v Visitor)         { v.VisitHeadingThree(n) }
+func (n *HeadingFourNode) Accept(v Visitor)          { v.VisitHeadingFour(n) }
+func (n *HeadingFiveNode) Accept(v Visitor)          { v.VisitHeadingFive(n) }
 func (n *HorizontalRuleHyphenNode) Accept(v Visitor) { v.VisitHorizontalRuleHyphen(n) }
 func (n *ListNode) Accept(v Visitor)                 { v.VisitList(n) }
 func (n *TaskListNode) Accept(v Visitor)             { v.VisitTaskList(n) }
@@ -94,11 +104,41 @@ func (p *Parser) Parse() (Node, error) {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
 			}
+			tree.Children = append(tree.Children, &HeadingOneNode{
+				Text: tok.Text,
+			})
 		case literal.HeadingTwo:
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
 			}
+			tree.Children = append(tree.Children, &HeadingTwoNode{
+				Text: tok.Text,
+			})
+		case literal.HeadingThree:
+			if len(currList) > 0 {
+				tree.Children = append(tree.Children, &ListNode{Items: currList})
+				currList = nil
+			}
+			tree.Children = append(tree.Children, &HeadingThreeNode{
+				Text: tok.Text,
+			})
+		case literal.HeadingFour:
+			if len(currList) > 0 {
+				tree.Children = append(tree.Children, &ListNode{Items: currList})
+				currList = nil
+			}
+			tree.Children = append(tree.Children, &HeadingFourNode{
+				Text: tok.Text,
+			})
+		case literal.HeadingFive:
+			if len(currList) > 0 {
+				tree.Children = append(tree.Children, &ListNode{Items: currList})
+				currList = nil
+			}
+			tree.Children = append(tree.Children, &HeadingFiveNode{
+				Text: tok.Text,
+			})
 		case literal.HorizontalRuleHyphen:
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})

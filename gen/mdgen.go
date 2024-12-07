@@ -22,23 +22,33 @@ func (g *MDGen) VisitTree(n *parse.TreeNode) {
 }
 
 func (g *MDGen) VisitHeadingOne(n *parse.HeadingOneNode) {
-	fmt.Fprintf(g.writer, "# %s\n", n.Text)
+	fmt.Fprintf(g.writer, "%s\n", n.Text)
+	fmt.Fprintln(g.writer)
 }
 
 func (g *MDGen) VisitHeadingTwo(n *parse.HeadingTwoNode) {
-	fmt.Fprintf(g.writer, "## %s\n", n.Text)
+	fmt.Fprintf(g.writer, "%s\n", n.Text)
+	fmt.Fprintln(g.writer)
 }
 
 func (g *MDGen) VisitHeadingThree(n *parse.HeadingThreeNode) {
-	fmt.Fprintf(g.writer, "### %s\n", n.Text)
+	fmt.Fprintf(g.writer, "%s\n", n.Text)
+	fmt.Fprintln(g.writer)
 }
 
 func (g *MDGen) VisitHeadingFour(n *parse.HeadingFourNode) {
-	fmt.Fprintf(g.writer, "#### %s\n", n.Text)
+	fmt.Fprintf(g.writer, "%s\n", n.Text)
+	fmt.Fprintln(g.writer)
+}
+
+func (g *MDGen) VisitHeadingFive(n *parse.HeadingFiveNode) {
+	fmt.Fprintf(g.writer, "%s\n", n.Text)
+	fmt.Fprintln(g.writer)
 }
 
 func (g *MDGen) VisitHorizontalRuleHyphen(n *parse.HorizontalRuleHyphenNode) {
 	fmt.Fprintf(g.writer, "%s\n", n.Text)
+	fmt.Fprintln(g.writer)
 }
 
 func (g *MDGen) VisitList(n *parse.ListNode) {
@@ -52,7 +62,6 @@ func (g *MDGen) VisitTaskList(n *parse.TaskListNode) {
 	for _, item := range n.Items {
 		fmt.Fprintf(g.writer, "- [ ] %s\n", item)
 	}
-	fmt.Fprintln(g.writer)
 }
 
 func (g *MDGen) VisitParagraph(n *parse.ParagraphNode) {
