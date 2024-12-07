@@ -2,12 +2,8 @@ package literal
 
 /*
 ## Block
-- [x] UnorderedListHyphen (-)
-- [ ] Nested UnorderedListHyphen (-)
-- [ ] UnorderedListAsterisk (*)
-- [ ] Nested UnorderedListAsterisk (*)
-- [ ] UnorderedListPlus (+)
-- [ ] Nested UnorderedListPlus (+)
+- [x] UnorderedList (-, *, +)
+- [ ] Nested UnorderedList (-, *, +)
 - [ ] Ordered Lists (1., 2., 3.)
 - [ ] Task Lists (- [ ] Task item)
 - [ ] Nested Task Lists (- [ ] Task item)
@@ -42,11 +38,15 @@ type MarkdownLiteral interface {
 	isLiteral()
 }
 
+type HeadingOne struct {
+	Text string
+}
+
 type HorizontalRuleHyphen struct {
 	Text string
 }
 
-type ListItemHyphen struct {
+type ListItem struct {
 	Text string
 }
 
@@ -60,8 +60,9 @@ type Paragraph struct {
 
 type BlankLine struct{}
 
+func (h HeadingOne) isLiteral()           {}
 func (h HorizontalRuleHyphen) isLiteral() {}
-func (l ListItemHyphen) isLiteral()       {}
+func (l ListItem) isLiteral()             {}
 func (t TaskList) isLiteral()             {}
 func (p Paragraph) isLiteral()            {}
 func (b BlankLine) isLiteral()            {}

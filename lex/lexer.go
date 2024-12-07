@@ -46,6 +46,17 @@ func (l *Lexer) NextToken() (Token, error) {
 			Line:    l.line,
 		}, nil
 
+	case strings.HasPrefix(line, "# "):
+		if l.debug {
+			fmt.Printf("HeadingOne: %s\nLine: %d\n", line, l.line)
+		}
+		return Token{
+			Literal: literal.HeadingOne{
+				Text: line,
+			},
+			Line: l.line,
+		}, nil
+
 	case strings.Compare(line, "---") == 0:
 		if l.debug {
 			fmt.Printf("HorizontalRuleHyphen: %s\nLine: %d\n", line, l.line)
@@ -68,12 +79,31 @@ func (l *Lexer) NextToken() (Token, error) {
 			Line: l.line,
 		}, nil
 
-	case strings.HasPrefix(line, "- "):
+	case strings.HasPrefix(line, "- ") || strings.HasPrefix(line, "* ") || strings.HasPrefix(line, "+ "):
 		if l.debug {
 			fmt.Printf("ListItem: %s\nLine: %d\n", line, l.line)
 		}
+
+		if strings.HasPrefix(line, "* ") {
+			return Token{
+				Literal: literal.ListItem{
+					Text: strings.TrimPrefix(line, "* "),
+				},
+				Line: l.line,
+			}, nil
+		}
+
+		if strings.HasPrefix(line, "+ ") {
+			return Token{
+				Literal: literal.ListItem{
+					Text: strings.TrimPrefix(line, "+ "),
+				},
+				Line: l.line,
+			}, nil
+		}
+
 		return Token{
-			Literal: literal.ListItemHyphen{
+			Literal: literal.ListItem{
 				Text: strings.TrimPrefix(line, "- "),
 			},
 			Line: l.line,

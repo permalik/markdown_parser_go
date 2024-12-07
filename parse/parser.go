@@ -20,6 +20,10 @@ type TreeNode struct {
 	Children []Node
 }
 
+type HeadingOneNode struct {
+	Text string
+}
+
 type HorizontalRuleHyphenNode struct {
 	Text string
 }
@@ -69,6 +73,11 @@ func (p *Parser) Parse() (Node, error) {
 		}
 
 		switch tok := token.Literal.(type) {
+		case literal.HeadingOne:
+			if len(currList) > 0 {
+				tree.Children = append(tree.Children, &ListNode{Items: currList})
+				currList = nil
+			}
 		case literal.HorizontalRuleHyphen:
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
@@ -93,7 +102,7 @@ func (p *Parser) Parse() (Node, error) {
 			tree.Children = append(tree.Children, &ParagraphNode{
 				Text: tok.Text,
 			})
-		case literal.ListItemHyphen:
+		case literal.ListItem:
 			currList = append(currList, tok.Text)
 		case literal.TaskList:
 			currTaskList = append(currTaskList, tok.Text)

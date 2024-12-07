@@ -21,6 +21,10 @@ func (g *MDGen) VisitTree(n *parse.TreeNode) {
 	}
 }
 
+func (g *MDGen) VisitHeadingOne(n *parse.HeadingOneNode) {
+	fmt.Fprintf(g.writer, "# %s\n", n.Text)
+}
+
 func (g *MDGen) VisitHorizontalRuleHyphen(n *parse.HorizontalRuleHyphenNode) {
 	fmt.Fprintf(g.writer, "%s\n", n.Text)
 }

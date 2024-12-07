@@ -20,13 +20,29 @@ This is *italic*, and this is **bold**. You can also combine them: ***bold and i
 
 ## Lists
 
-### Unordered List
+### Unordered List Hyphen
 
 - Item 1
 - Item 2
   - Subitem 1
   - Subitem 2
 - Item 3
+
+### Unordered List Asterisk
+
+* Item 1
+* Item 2
+  * Subitem 1
+  * Subitem 2
+* Item 3
+
+### Unordered List Plus
+
++ Item 1
++ Item 2
+  + Subitem 1
+  + Subitem 2
++ Item 3
 
 ### Ordered List
 
