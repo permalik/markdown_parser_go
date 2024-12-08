@@ -51,6 +51,7 @@ func (g *MDGen) VisitHeadingSix(n *parse.HeadingSixNode) {
 	fmt.Fprintln(g.writer)
 }
 
+// TODO: gen max line length
 func (g *MDGen) VisitHorizontalRule(n *parse.HorizontalRuleNode) {
 	fmt.Fprintf(g.writer, "%s\n", n.Text)
 	fmt.Fprintln(g.writer)

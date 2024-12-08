@@ -14,9 +14,7 @@ package literal
 
 ## Line
 - [x] Heading (#, ##, ###, ####, #####, ######)
-- [x] Horizontal Rule (---)
-- [ ] Horizontal Rule (___)
-- [ ] Horizontal Rule (***)
+- [x] Horizontal Rule (---, ___, ***)
 - [ ] Footnotes ([^1]: Definition text)
 
 ## Inline
