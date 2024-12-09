@@ -5,10 +5,10 @@ package literal
 - [x] UnorderedList (-, *, +)
 - [ ] Nested UnorderedList (-, *, +)
 - [ ] Ordered Lists (1., 2., 3.)
-- [ ] Task Lists (- [ ] Task item)
+- [x] Task Lists (- [ ] Task item)
 - [ ] Nested Task Lists (- [ ] Task item)
-- [ ] Definition Lists (Term, followed by a new line : Definition)
-- [ ] Blockquotes (>)
+- [ ] Definition (Term\n: Definition)
+- [ ] Blockquote (>)
 - [ ] Code Blocks (triple-backspace, four-space indentation)
 - [ ] Tables (using | for columns in a table row)
 
@@ -74,6 +74,10 @@ type TaskList struct {
 	Text string
 }
 
+type Definition struct {
+	Text string
+}
+
 type Paragraph struct {
 	Text string
 }
@@ -89,5 +93,6 @@ func (h HeadingSix) isLiteral()     {}
 func (h HorizontalRule) isLiteral() {}
 func (l ListItem) isLiteral()       {}
 func (t TaskList) isLiteral()       {}
+func (d Definition) isLiteral()     {}
 func (p Paragraph) isLiteral()      {}
 func (b BlankLine) isLiteral()      {}

@@ -56,6 +56,10 @@ type TaskListNode struct {
 	Items []string
 }
 
+type DefinitionNode struct {
+	Text string
+}
+
 type ParagraphNode struct {
 	Text string
 }
@@ -71,6 +75,7 @@ type Visitor interface {
 	VisitHorizontalRule(n *HorizontalRuleNode)
 	VisitList(n *ListNode)
 	VisitTaskList(n *TaskListNode)
+	VisitDefinition(n *DefinitionNode)
 	VisitParagraph(n *ParagraphNode)
 }
 
@@ -84,6 +89,7 @@ func (n *HeadingSixNode) Accept(v Visitor)     { v.VisitHeadingSix(n) }
 func (n *HorizontalRuleNode) Accept(v Visitor) { v.VisitHorizontalRule(n) }
 func (n *ListNode) Accept(v Visitor)           { v.VisitList(n) }
 func (n *TaskListNode) Accept(v Visitor)       { v.VisitTaskList(n) }
+func (n *DefinitionNode) Accept(v Visitor)     { v.VisitDefinition(n) }
 func (n *ParagraphNode) Accept(v Visitor)      { v.VisitParagraph(n) }
 
 func NewParser(lexer *lex.Lexer) *Parser {
@@ -163,6 +169,18 @@ func (p *Parser) Parse() (Node, error) {
 				currTaskList = nil
 			}
 			tree.Children = append(tree.Children, &HorizontalRuleNode{
+				Text: tok.Text,
+			})
+		case literal.Definition:
+			if len(currList) > 0 {
+				tree.Children = append(tree.Children, &ListNode{Items: currList})
+				currList = nil
+			}
+			if len(currTaskList) > 0 {
+				tree.Children = append(tree.Children, &TaskListNode{Items: currTaskList})
+				currTaskList = nil
+			}
+			tree.Children = append(tree.Children, &DefinitionNode{
 				Text: tok.Text,
 			})
 		case literal.Paragraph:

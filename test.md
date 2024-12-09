@@ -58,6 +58,17 @@ This is *italic*, and this is **bold**. You can also combine them: ***bold and i
 - [ ] Task two
 - [ ] Task three
 
+## Definition
+
+Term One
+: Definition One
+
+Term Two
+: Definition Two
+
+Term Three
+: Definition Three
+
 ## Links
 
 This is a [link to OpenAI](https://www.openai.com).

@@ -155,6 +155,13 @@ func (l *Lexer) NextToken() (Token, error) {
 			},
 			Line: l.line,
 		}, nil
+	case strings.HasPrefix(line, ": "):
+		return Token{
+			Literal: literal.Definition{
+				Text: strings.TrimPrefix(line, ": "),
+			},
+			Line: l.line,
+		}, nil
 	default:
 		// if l.debug {
 		// 	fmt.Printf("Paragraph: %s\nLine: %d\n", line, l.line)
