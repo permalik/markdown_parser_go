@@ -130,6 +130,10 @@ func (p *Parser) Parse() (Node, error) {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
 			}
+			if len(currTaskList) > 0 {
+				tree.Children = append(tree.Children, &TaskListNode{Items: currTaskList})
+				currTaskList = nil
+			}
 			tree.Children = append(tree.Children, &HeadingTwoNode{
 				Text: tok.Text,
 			})
@@ -137,6 +141,10 @@ func (p *Parser) Parse() (Node, error) {
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
+			}
+			if len(currTaskList) > 0 {
+				tree.Children = append(tree.Children, &TaskListNode{Items: currTaskList})
+				currTaskList = nil
 			}
 			tree.Children = append(tree.Children, &HeadingThreeNode{
 				Text: tok.Text,
@@ -146,6 +154,10 @@ func (p *Parser) Parse() (Node, error) {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
 			}
+			if len(currTaskList) > 0 {
+				tree.Children = append(tree.Children, &TaskListNode{Items: currTaskList})
+				currTaskList = nil
+			}
 			tree.Children = append(tree.Children, &HeadingFourNode{
 				Text: tok.Text,
 			})
@@ -154,6 +166,10 @@ func (p *Parser) Parse() (Node, error) {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
 			}
+			if len(currTaskList) > 0 {
+				tree.Children = append(tree.Children, &TaskListNode{Items: currTaskList})
+				currTaskList = nil
+			}
 			tree.Children = append(tree.Children, &HeadingFiveNode{
 				Text: tok.Text,
 			})
@@ -161,6 +177,10 @@ func (p *Parser) Parse() (Node, error) {
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
+			}
+			if len(currTaskList) > 0 {
+				tree.Children = append(tree.Children, &TaskListNode{Items: currTaskList})
+				currTaskList = nil
 			}
 			tree.Children = append(tree.Children, &HeadingSixNode{
 				Text: tok.Text,
@@ -221,6 +241,10 @@ func (p *Parser) Parse() (Node, error) {
 			if len(currList) > 0 {
 				tree.Children = append(tree.Children, &ListNode{Items: currList})
 				currList = nil
+			}
+			if len(currTaskList) > 0 {
+				tree.Children = append(tree.Children, &TaskListNode{Items: currTaskList})
+				currTaskList = nil
 			}
 		}
 	}

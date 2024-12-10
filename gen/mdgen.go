@@ -76,7 +76,7 @@ func (g *MDGen) VisitDefinition(n *parse.DefinitionNode) {
 }
 
 func (g *MDGen) VisitCodeBlock(n *parse.CodeBlockNode) {
-	fmt.Fprintf(g.writer, "```\n", n.Text)
+	fmt.Fprintf(g.writer, "```\n")
 	fmt.Fprintln(g.writer)
 }
 
