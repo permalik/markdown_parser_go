@@ -9,7 +9,7 @@ package literal
 - [ ] Nested Task Lists (- [ ] Task item)
 - [ ] Definition (Term\n: Definition)
 - [ ] Blockquote (>)
-- [ ] Code Blocks (triple-backspace, four-space indentation)
+- [/] Code Blocks (triple-backspace, four-space indentation)
 - [ ] Tables (using | for columns in a table row)
 
 ## Line
@@ -78,6 +78,10 @@ type Definition struct {
 	Text string
 }
 
+type CodeBlock struct {
+	Text string
+}
+
 type Paragraph struct {
 	Text string
 }
@@ -94,5 +98,6 @@ func (h HorizontalRule) isLiteral() {}
 func (l ListItem) isLiteral()       {}
 func (t TaskList) isLiteral()       {}
 func (d Definition) isLiteral()     {}
+func (c CodeBlock) isLiteral()      {}
 func (p Paragraph) isLiteral()      {}
 func (b BlankLine) isLiteral()      {}

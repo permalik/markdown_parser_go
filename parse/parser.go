@@ -60,6 +60,10 @@ type DefinitionNode struct {
 	Text string
 }
 
+type CodeBlockNode struct {
+	Text string
+}
+
 type ParagraphNode struct {
 	Text string
 }
@@ -76,6 +80,7 @@ type Visitor interface {
 	VisitList(n *ListNode)
 	VisitTaskList(n *TaskListNode)
 	VisitDefinition(n *DefinitionNode)
+	VisitCodeBlock(n *CodeBlockNode)
 	VisitParagraph(n *ParagraphNode)
 }
 
@@ -90,6 +95,7 @@ func (n *HorizontalRuleNode) Accept(v Visitor) { v.VisitHorizontalRule(n) }
 func (n *ListNode) Accept(v Visitor)           { v.VisitList(n) }
 func (n *TaskListNode) Accept(v Visitor)       { v.VisitTaskList(n) }
 func (n *DefinitionNode) Accept(v Visitor)     { v.VisitDefinition(n) }
+func (n *CodeBlockNode) Accept(v Visitor)      { v.VisitCodeBlock(n) }
 func (n *ParagraphNode) Accept(v Visitor)      { v.VisitParagraph(n) }
 
 func NewParser(lexer *lex.Lexer) *Parser {
@@ -181,6 +187,18 @@ func (p *Parser) Parse() (Node, error) {
 				currTaskList = nil
 			}
 			tree.Children = append(tree.Children, &DefinitionNode{
+				Text: tok.Text,
+			})
+		case literal.CodeBlock:
+			if len(currList) > 0 {
+				tree.Children = append(tree.Children, &ListNode{Items: currList})
+				currList = nil
+			}
+			if len(currTaskList) > 0 {
+				tree.Children = append(tree.Children, &TaskListNode{Items: currTaskList})
+				currTaskList = nil
+			}
+			tree.Children = append(tree.Children, &CodeBlockNode{
 				Text: tok.Text,
 			})
 		case literal.Paragraph:

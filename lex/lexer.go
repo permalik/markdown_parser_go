@@ -162,6 +162,16 @@ func (l *Lexer) NextToken() (Token, error) {
 			},
 			Line: l.line,
 		}, nil
+	case strings.Compare(line, "```") == 0:
+		if l.debug {
+			fmt.Printf("CodeBlock: %s\nLine: %d\n", line, l.line)
+		}
+		return Token{
+			Literal: literal.CodeBlock{
+				Text: line,
+			},
+			Line: l.line,
+		}, nil
 	default:
 		// if l.debug {
 		// 	fmt.Printf("Paragraph: %s\nLine: %d\n", line, l.line)
