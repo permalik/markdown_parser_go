@@ -130,7 +130,6 @@ func (l *Lexer) NextToken() (Token, error) {
 		if l.debug {
 			fmt.Printf("ListItem: %s\nLine: %d\n", line, l.line)
 		}
-
 		if strings.HasPrefix(line, "* ") {
 			return Token{
 				Literal: literal.ListItem{
@@ -139,7 +138,6 @@ func (l *Lexer) NextToken() (Token, error) {
 				Line: l.line,
 			}, nil
 		}
-
 		if strings.HasPrefix(line, "+ ") {
 			return Token{
 				Literal: literal.ListItem{
@@ -148,7 +146,6 @@ func (l *Lexer) NextToken() (Token, error) {
 				Line: l.line,
 			}, nil
 		}
-
 		return Token{
 			Literal: literal.ListItem{
 				Text: strings.TrimPrefix(line, "- "),
@@ -156,6 +153,9 @@ func (l *Lexer) NextToken() (Token, error) {
 			Line: l.line,
 		}, nil
 	case strings.HasPrefix(line, ": "):
+		if l.debug {
+			fmt.Printf("Definition: %s\nLine: %d\n", line, l.line)
+		}
 		return Token{
 			Literal: literal.Definition{
 				Text: strings.TrimPrefix(line, ": "),
