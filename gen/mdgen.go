@@ -71,7 +71,7 @@ func (g *MDGen) VisitTaskList(n *parse.TaskListNode) {
 }
 
 func (g *MDGen) VisitDefinition(n *parse.DefinitionNode) {
-	fmt.Fprintf(g.writer, "%s\n", n.Text)
+	fmt.Fprintf(g.writer, ": %s\n", n.Text)
 	fmt.Fprintln(g.writer)
 }
 
