@@ -172,10 +172,20 @@ func (l *Lexer) NextToken() (Token, error) {
 			},
 			Line: l.line,
 		}, nil
+	case strings.Compare(line, "```javascript") == 0:
+		if l.debug {
+			fmt.Printf("CodeBlockJavaScript: %s\nLine: %d\n", line, l.line)
+		}
+		return Token{
+			Literal: literal.CodeBlockJavaScript{
+				Text: line,
+			},
+			Line: l.line,
+		}, nil
 	default:
-		// if l.debug {
-		// 	fmt.Printf("Paragraph: %s\nLine: %d\n", line, l.line)
-		// }
+		if l.debug {
+			fmt.Printf("Paragraph: %s\nLine: %d\n", line, l.line)
+		}
 		return Token{
 			Literal: literal.Paragraph{
 				Text: line,

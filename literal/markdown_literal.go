@@ -82,22 +82,27 @@ type CodeBlock struct {
 	Text string
 }
 
+type CodeBlockJavaScript struct {
+	Text string
+}
+
 type Paragraph struct {
 	Text string
 }
 
 type BlankLine struct{}
 
-func (h HeadingOne) isLiteral()     {}
-func (h HeadingTwo) isLiteral()     {}
-func (h HeadingThree) isLiteral()   {}
-func (h HeadingFour) isLiteral()    {}
-func (h HeadingFive) isLiteral()    {}
-func (h HeadingSix) isLiteral()     {}
-func (h HorizontalRule) isLiteral() {}
-func (l ListItem) isLiteral()       {}
-func (t TaskList) isLiteral()       {}
-func (d Definition) isLiteral()     {}
-func (c CodeBlock) isLiteral()      {}
-func (p Paragraph) isLiteral()      {}
-func (b BlankLine) isLiteral()      {}
+func (h HeadingOne) isLiteral()          {}
+func (h HeadingTwo) isLiteral()          {}
+func (h HeadingThree) isLiteral()        {}
+func (h HeadingFour) isLiteral()         {}
+func (h HeadingFive) isLiteral()         {}
+func (h HeadingSix) isLiteral()          {}
+func (h HorizontalRule) isLiteral()      {}
+func (l ListItem) isLiteral()            {}
+func (t TaskList) isLiteral()            {}
+func (d Definition) isLiteral()          {}
+func (c CodeBlock) isLiteral()           {}
+func (c CodeBlockJavaScript) isLiteral() {}
+func (p Paragraph) isLiteral()           {}
+func (b BlankLine) isLiteral()           {}

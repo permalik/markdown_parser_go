@@ -80,6 +80,12 @@ func (g *MDGen) VisitCodeBlock(n *parse.CodeBlockNode) {
 	fmt.Fprintln(g.writer)
 }
 
+// TODO: generate additional node specific to 'js' nodes rather 'javascript'
+func (g *MDGen) VisitCodeBlockJavaScript(n *parse.CodeBlockJavaScriptNode) {
+	fmt.Fprintf(g.writer, "```javascript\n")
+	fmt.Fprintln(g.writer)
+}
+
 func (g *MDGen) VisitParagraph(n *parse.ParagraphNode) {
 	fmt.Fprintf(g.writer, "%s\n\n", n.Text)
 }
