@@ -86,6 +86,10 @@ func (g *MDGen) VisitCodeBlockJavaScript(n *parse.CodeBlockJavaScriptNode) {
 	fmt.Fprintln(g.writer)
 }
 
+func (g *MDGen) VisitBrokenParagraph(n *parse.BrokenParagraphNode) {
+	fmt.Fprintf(g.writer, "%s\n\n", n.Text)
+}
+
 func (g *MDGen) VisitParagraph(n *parse.ParagraphNode) {
 	fmt.Fprintf(g.writer, "%s\n\n", n.Text)
 }

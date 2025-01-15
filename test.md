@@ -69,6 +69,10 @@ Term Two
 Term Three
 : Definition Three
 
+Line with intentional linebreak  
+Line with intentional linebreak  
+Line with intentional linebreak  
+
 ## Links
 
 This is a [link to OpenAI](https://www.openai.com).

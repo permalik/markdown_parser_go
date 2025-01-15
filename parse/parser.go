@@ -72,6 +72,10 @@ type ParagraphNode struct {
 	Text string
 }
 
+type BrokenParagraphNode struct {
+	Text string
+}
+
 type Visitor interface {
 	VisitTree(n *TreeNode)
 	VisitHeadingOne(n *HeadingOneNode)
@@ -87,6 +91,7 @@ type Visitor interface {
 	VisitCodeBlock(n *CodeBlockNode)
 	VisitCodeBlockJavaScript(n *CodeBlockJavaScriptNode)
 	VisitParagraph(n *ParagraphNode)
+	VisitBrokenParagraph(n *BrokenParagraphNode)
 }
 
 func (n *TreeNode) Accept(v Visitor)                { v.VisitTree(n) }
@@ -103,6 +108,7 @@ func (n *DefinitionNode) Accept(v Visitor)          { v.VisitDefinition(n) }
 func (n *CodeBlockNode) Accept(v Visitor)           { v.VisitCodeBlock(n) }
 func (n *CodeBlockJavaScriptNode) Accept(v Visitor) { v.VisitCodeBlockJavaScript(n) }
 func (n *ParagraphNode) Accept(v Visitor)           { v.VisitParagraph(n) }
+func (n *BrokenParagraphNode) Accept(v Visitor)     { v.VisitBrokenParagraph(n) }
 
 func NewParser(lexer *lex.Lexer) *Parser {
 	return &Parser{lexer: lexer}
@@ -238,6 +244,18 @@ func (p *Parser) Parse() (Node, error) {
 				currTaskList = nil
 			}
 			tree.Children = append(tree.Children, &CodeBlockJavaScriptNode{
+				Text: tok.Text,
+			})
+		case literal.BrokenParagraph:
+			if len(currList) > 0 {
+				tree.Children = append(tree.Children, &ListNode{Items: currList})
+				currList = nil
+			}
+			if len(currTaskList) > 0 {
+				tree.Children = append(tree.Children, &TaskListNode{Items: currTaskList})
+				currTaskList = nil
+			}
+			tree.Children = append(tree.Children, &BrokenParagraphNode{
 				Text: tok.Text,
 			})
 		case literal.Paragraph:

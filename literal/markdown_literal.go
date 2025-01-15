@@ -30,7 +30,7 @@ package literal
 - [ ] Comments (<!-- comment -->)
 
 ## Separators
-- [ ] Line Breaks (two or more spaces at the end of a line)
+- [/] Line Breaks (two or more spaces at the end of a line)
 - [ ] Paragraph (line-separated text)
 */
 
@@ -86,6 +86,10 @@ type CodeBlockJavaScript struct {
 	Text string
 }
 
+type BrokenParagraph struct {
+	Text string
+}
+
 type Paragraph struct {
 	Text string
 }
@@ -104,5 +108,6 @@ func (t TaskList) isLiteral()            {}
 func (d Definition) isLiteral()          {}
 func (c CodeBlock) isLiteral()           {}
 func (c CodeBlockJavaScript) isLiteral() {}
+func (b BrokenParagraph) isLiteral()     {}
 func (p Paragraph) isLiteral()           {}
 func (b BlankLine) isLiteral()           {}
