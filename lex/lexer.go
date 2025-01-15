@@ -9,12 +9,14 @@ import (
 	"github.com/permalik/markdown_parser_go/literal"
 )
 
+// TODO: impl column
 type Token struct {
 	Literal literal.MarkdownLiteral
 	Line    int
 	Column  int
 }
 
+// TODO: update casing
 type Lexer struct {
 	scanner *bufio.Scanner
 	line    int
